@@ -1,39 +1,24 @@
-"""
-from main import main
 import pytest
-def test_main_prints_ok(capsys):
-    main("тест")
-    captured = capsys.readouterr()
-    assert "ok" in captured.out
+from main import on_click
+def test_on_click_currencies():
+    message = MockMessage("Курсы валют")
+    result = on_click(message)
+    assert result == "Expected result for currencies"
 
-"""
-import pytest
-from unittest.mock import MagicMock
-from main import main, on_click
+def test_on_click_news():
+    message = MockMessage("Получать новости")
+    result = on_click(message)
+    assert result == "Expected result for news"
 
-@pytest.fixture
-def mock_telebot():
-    return MagicMock()
+# Define a MockMessage class to simulate the message object
+class MockMessage:
+    def __init__(self, text):
+        self.text = text
+        self.chat = MockChat()
 
-def test_start_command(mock_telebot):
-    message = MagicMock()
-    message.text = '/start'
-    main(message, telebot=mock_telebot)
-    mock_telebot.send_message.assert_called_once_with(
-        message.chat.id, f'Привет, {message.from_user.first_name} {message.from_user.last_name}'
-    )
+class MockChat:
+    def __init__(self):
+        self.id = 403846704
 
-def test_kursy_valyut_command(mock_telebot):
-    message = MagicMock()
-    message.text = 'Курсы валют'
-    on_click(message, telebot=mock_telebot)
-
-def test_poluchat_novosti_command(mock_telebot):
-    message = MagicMock()
-    message.text = 'Получать новости'
-    on_click(message, telebot=mock_telebot)
-
-def test_kursy_kriptovalyut_command(mock_telebot):
-    message = MagicMock()
-    message.text = 'Курсы криптовалют'
-    on_click(message, telebot=mock_telebot)
+if __name__ == "__main__":
+    pytest.main()

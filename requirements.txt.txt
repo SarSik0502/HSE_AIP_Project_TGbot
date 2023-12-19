@@ -1,0 +1,5 @@
+pytest
+requests
+telebot
+datetime
+bs4
